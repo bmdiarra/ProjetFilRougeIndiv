@@ -2,23 +2,15 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
+use App\Entity\Cm;
 use App\Entity\Profil;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AppFixtures extends Fixture implements DependentFixtureInterface
+class CmFixtures extends Fixture implements DependentFixtureInterface
 {
-    /* public function load(ObjectManager $manager)
-    { */
-        // $product = new Product();
-        // $manager->persist($product);
-
-     /*    $manager->flush();
-    } */
-
     private $encoder;
     public function __construct(UserPasswordEncoderInterface $encoder ){
         
@@ -28,14 +20,17 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 
      public function load(ObjectManager $manager)
     { 
-
-        /* $profils = ["ADMIN", "FORMATEUR", "APPRENANT", "CM"];
-        foreach ($profils as $key => $libelle) {
-        $profil =new Profil() ;
-        $profil ->setLibelle ($libelle );
-        $manager ->persist ($profil );
+        
+        for ($i=0 ; $i < 3 ; $i++) { 
+        $cm =new Cm() ;
+        $cm ->setUsername('CM'.$i);
+        $cm ->setProfil ($this->getReference(ProfilFixtures::CM_PROFIL_REFERENCE));
+        $password = $this->encoder->encodePassword($cm, 'pass1234');
+        $cm ->setPassword($password);
+        $manager ->persist ($cm );
         }
-        $manager ->flush(); */
+
+        $manager ->flush();  
    }
 
    public function getDependencies()
@@ -43,5 +38,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         return array(
             ProfilFixtures::class,
         );
-    }
+    } 
+
+   
 }
