@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Cm;
+use Faker\Factory;
 use App\Entity\Profil;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,11 +21,15 @@ class CmFixtures extends Fixture implements DependentFixtureInterface
 
      public function load(ObjectManager $manager)
     { 
+        $faker = Factory::create('fr_FR');
         
         for ($i=0 ; $i < 3 ; $i++) { 
         $cm =new Cm() ;
         $cm ->setUsername('CM'.$i);
         $cm ->setProfil ($this->getReference(ProfilFixtures::CM_PROFIL_REFERENCE));
+        $cm ->setPrenom ($faker->firstName);
+        $cm ->setNom ($faker->lastName);
+        $cm ->setIsdeleted ('no');
         $password = $this->encoder->encodePassword($cm, 'pass1234');
         $cm ->setPassword($password);
         $manager ->persist ($cm );
