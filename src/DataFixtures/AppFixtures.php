@@ -2,13 +2,14 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
+use App\Entity\Profil;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Entity\Profil;
-use App\Entity\User;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements DependentFixtureInterface
 {
     /* public function load(ObjectManager $manager)
     { */
@@ -28,13 +29,20 @@ class AppFixtures extends Fixture
      public function load(ObjectManager $manager)
     { 
 
-        $profils = ["ADMIN", "FORMATEUR", "APPRENANT", "CM"];
+        /* $profils = ["ADMIN", "FORMATEUR", "APPRENANT", "CM"];
         foreach ($profils as $key => $libelle) {
         $profil =new Profil() ;
         $profil ->setLibelle ($libelle );
         $manager ->persist ($profil );
         }
-        $manager ->flush();
-    
+        $manager ->flush(); */
    }
+
+   public function getDependencies()
+    {
+        return array(
+            ProfilFixtures::class,
+            UserFixtures::class
+        );
+    }
 }
