@@ -20,18 +20,22 @@ class ProfilFixtures extends Fixture
     {
         $profilAdmin = new Profil();
         $profilAdmin ->setLibelle ('ADMIN');
+        $profilAdmin ->setIsdeleted (false);
         $manager->persist($profilAdmin);
 
         $profilFormateur = new Profil();
         $profilFormateur ->setLibelle ('FORMATEUR');
+        $profilFormateur ->setIsdeleted (false);
         $manager->persist($profilFormateur);
 
         $profilApprenant = new Profil();
         $profilApprenant ->setLibelle ('APPRENANT');
+        $profilApprenant ->setIsdeleted (false);
         $manager->persist($profilApprenant);
 
         $profilCm = new Profil();
         $profilCm ->setLibelle ('CM');
+        $profilCm ->setIsdeleted (false);
         $manager->persist($profilCm);
 
         $manager->flush();

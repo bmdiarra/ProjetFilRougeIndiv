@@ -2,13 +2,51 @@
 
 namespace App\Entity;
 
-use App\Repository\ProfilRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProfilRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
+ * @ApiResource(
+ *      attributes={"pagination_items_per_page"=7},
+ *      collectionOperations={
+ *          "get_admin_profils":{
+ *              "method": "get",
+ *              "path": "/admin/profils",
+ *              "normalization_context"={"groups":"admin_profil:read"},
+ *          },
+ *          "post_admin_profils":{
+ *              "method": "post",
+ *              "path": "/admin/profils",
+ *          }
+ *      },
+ *      itemOperations={
+ *          "get_admin_profils_id":{
+ *              "method": "get",
+ *              "path": "/admin/profils/{id}",
+ *              "normalization_context"={"groups":"admin_profil:read"},
+ *          },
+ *          "get_admin_profils_id_users":{
+ *              "method": "get",
+ *              "path": "/admin/profil/{id}/users",
+ *              "normalization_context"={"groups":"admin_profil_id_users:read"},
+ *          },
+ *          "put_admin_profils_id":{
+ *              "method": "put",
+ *              "path": "/admin/profils/{id}", 
+ *          },
+ *      }
+ * ),
+ * @ApiFilter(BooleanFilter::class, properties={"isdeleted"})
+ * 
  */
 class Profil
 {
@@ -16,18 +54,28 @@ class Profil
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin_profil:read","admin_profil_id_users:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin_profil:read","admin_profil_id_users:read"})
+     * @Assert\NotBlank()
      */
     private $libelle;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil")
+     * @Groups({"admin_profil_id_users:read"})
      */
     private $users;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Assert\NotBlank()
+     */
+    private $isdeleted;
 
     public function __construct()
     {
@@ -77,6 +125,18 @@ class Profil
                 $user->setProfil(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsdeleted(): ?bool
+    {
+        return $this->isdeleted;
+    }
+
+    public function setIsdeleted(bool $isdeleted): self
+    {
+        $this->isdeleted = $isdeleted;
 
         return $this;
     }

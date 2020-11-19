@@ -7,8 +7,11 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -16,6 +19,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"admin"="Admin","formateur"="Formateur", "apprenant"="Apprenant", "cm"="Cm", "user"="User"})
+ * @ApiResource(
+ *  attributes={"pagination_items_per_page"=7},
+ *   collectionOperations={
+ *         "get_admin_users":{
+ *              "method": "get",
+ *              "path": "/admin/users",
+ *              "normalization_context"={"groups":"admin_user:read"},
+ *          },
+ *   },
+ *   itemOperations={
+ *      "get_admin_users":{
+ *              "method": "get",
+ *              "path": "/admin/users/{id}",
+ *              "normalization_context"={"groups":"admin_user:read"},
+ *          },
+ *   }
+ * )
  */
 class User implements UserInterface
 {
@@ -23,21 +43,24 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin_user:read"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank()
      */
-    private $username;
+    protected $username;
 
-    private $roles = [];
+    protected $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
@@ -47,22 +70,29 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="blob", nullable=true)
      */
-    private $avatar;
+    protected $avatar;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
-    private $prenom;
+    protected $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
-    private $nom;
+    protected $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $isdeleted;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Chat::class, inversedBy="users")
+     */
+    protected $chats;
 
 
     public function __construct()
@@ -199,6 +229,18 @@ class User implements UserInterface
     public function setIsdeleted(string $isdeleted): self
     {
         $this->isdeleted = $isdeleted;
+
+        return $this;
+    }
+
+    public function getChats(): ?Chat
+    {
+        return $this->chats;
+    }
+
+    public function setChats(?Chat $chats): self
+    {
+        $this->chats = $chats;
 
         return $this;
     }
