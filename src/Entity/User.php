@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -27,12 +28,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "path": "/admin/users",
  *              "normalization_context"={"groups":"admin_user:read"},
  *          },
+ *         "POST":{
+ *              "path": "/admin/users",
+ *          }, 
  *   },
  *   itemOperations={
  *      "get_admin_users":{
  *              "method": "get",
  *              "path": "/admin/users/{id}",
  *              "normalization_context"={"groups":"admin_user:read"},
+ *          },
+ *          "put_admin_users":{
+ *              "method": "put",
+ *              "path": "/admin/users/{id}",
  *          },
  *   }
  * )
@@ -64,6 +72,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
+     * @Groups({"admin_user:read"})
      */
     protected $profil;
 

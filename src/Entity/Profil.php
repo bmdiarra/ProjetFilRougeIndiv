@@ -12,37 +12,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\DataPersister\ProfilPersister;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
  * @ApiResource(
+ *      routePrefix="/admin",
  *      attributes={"pagination_items_per_page"=7},
  *      collectionOperations={
  *          "get_admin_profils":{
  *              "method": "get",
- *              "path": "/admin/profils",
+ *              "path": "/profils",
  *              "normalization_context"={"groups":"admin_profil:read"},
  *          },
  *          "post_admin_profils":{
  *              "method": "post",
- *              "path": "/admin/profils",
+ *              "path": "/profils",
  *          }
  *      },
  *      itemOperations={
- *          "get_admin_profils_id":{
- *              "method": "get",
- *              "path": "/admin/profils/{id}",
- *              "normalization_context"={"groups":"admin_profil:read"},
- *          },
- *          "get_admin_profils_id_users":{
- *              "method": "get",
- *              "path": "/admin/profil/{id}/users",
- *              "normalization_context"={"groups":"admin_profil_id_users:read"},
- *          },
- *          "put_admin_profils_id":{
- *              "method": "put",
- *              "path": "/admin/profils/{id}", 
- *          },
+ *          "GET","PUT", "DELETE"
  *      }
  * ),
  * @ApiFilter(BooleanFilter::class, properties={"isdeleted"})
