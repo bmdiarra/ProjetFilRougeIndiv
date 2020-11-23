@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\UploadService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,11 +20,11 @@ class UserController extends AbstractController
  *      methods={"POST"},
  * )
  */
-    public function addUser(Request $request, DenormalizerInterface $denormalize, ValidatorInterface $validator){
+    public function addUser(Request $request, DenormalizerInterface $denormalize, ValidatorInterface $validator, UploadService $uploads){
         $requestContent = $request->request->all();
-        
-        $avatar = $request->files->get('avatar');
-        $requestContent['avatar'] = fopen($avatar->getRealPath(), 'rb');
+        $avatar = $uploads->upload('avatar', $request);
+        /* $avatar = $request->files->get('avatar');
+        $requestContent['avatar'] = fopen($avatar->getRealPath(), 'rb'); */
 
         $user = $denormalize->denormalize($requestContent, User::class);
         $user->setAvatar($avatar);
