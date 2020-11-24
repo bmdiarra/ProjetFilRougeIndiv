@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\UploadService;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +16,6 @@ class UserController extends AbstractController
 {
  /**
  * @Route(
- *      name="addUSer",
  *      path="/api/admin/users",
  *      methods={"POST"},
  * )
@@ -23,23 +23,21 @@ class UserController extends AbstractController
     public function addUser(Request $request, DenormalizerInterface $denormalize, ValidatorInterface $validator, UploadService $uploads){
         $requestContent = $request->request->all();
         $avatar = $uploads->upload('avatar', $request);
-        /* $avatar = $request->files->get('avatar');
-        $requestContent['avatar'] = fopen($avatar->getRealPath(), 'rb'); */
 
         $user = $denormalize->denormalize($requestContent, User::class);
         $user->setAvatar($avatar);
         $errors = $validator->validate($user);
 
-      /* if (count($errors) > 0) {
+        if ($errors != NULL) {
           /*
           * Uses a __toString method on the $errors variable which is a
           * ConstraintViolationList object. This gives us a nice string
           * for debugging.
           */
-         /* $errorsString = (string) $errors;
+         $errorsString = (string) $errors;
 
           return new Response($errorsString);
-      } */
+      }
 
       $em = $this->getDoctrine()->getManager();
         $em->persist($user);
@@ -47,5 +45,43 @@ class UserController extends AbstractController
       return new Response('The author is valid! Yes!');
 
     }
+
+  /**
+   * @Route(
+   *      name="putUSer",
+   *      path="/api/admin/users/{id}",
+   *      methods={"POST"},
+   * )
+   */
+  public function putUser(Request $request, DenormalizerInterface $denormalize, ValidatorInterface $validator, UploadService $uploads, UserRepository $repo){
+      
+    $requestContent = $request->request->all();
+    $user = $repo->find((int)$request->get("id"));
+    $avatar = $uploads->upload('avatar', $request);
+
+    $user = $denormalize->denormalize($requestContent, User::class);
+    $user->setAvatar($avatar);
+
+    $errors = $validator->validate($user);
+    
+     // if (count($errors) > 0)
+      if ($errors != NULL) {
+          
+          /* Uses a __toString method on the $errors variable which is a
+          * ConstraintViolationList object. This gives us a nice string
+          * for debugging.
+          */
+         $errorsString = (string) $errors;
+
+          return new Response($errorsString);
+      }
+
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($user);
+    $em->flush();
+    return new Response('The author is valid! Yes!');
+
+  }
+
 
 }

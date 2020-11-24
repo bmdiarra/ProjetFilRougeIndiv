@@ -31,7 +31,17 @@ use App\DataPersister\ProfilPersister;
  *          }
  *      },
  *      itemOperations={
- *          "GET","PUT", "DELETE"
+ *          "get_admin_profils":{
+ *              "method": "get",
+ *              "path": "/profils/{id}",
+ *              "normalization_context"={"groups":"admin_profil:read"},
+ *          },
+ *          "get_admin_profil_id_users":{
+ *              "method": "get",
+ *              "path": "/profil/{id}/users",
+ *              "normalization_context"={"groups":"admin_profil_id_users:read"},
+ *          },
+ *          "PUT","DELETE"
  *      }
  * ),
  * @ApiFilter(BooleanFilter::class, properties={"isdeleted"})

@@ -2,13 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\ApprenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ApprenantRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
+ * @ApiResource(
+ *      collectionOperations={
+ *      },
+ *      itemOperations={
+ *      }
+ * )
  */
 class Apprenant extends User
 {

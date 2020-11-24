@@ -28,8 +28,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "path": "/admin/users",
  *              "normalization_context"={"groups":"admin_user:read"},
  *          },
- *         "POST":{
+ *         "addUSer":{
+ *              "method":"post",
  *              "path": "/admin/users",
+ *              "deserialize"=false
  *          }, 
  *   },
  *   itemOperations={
