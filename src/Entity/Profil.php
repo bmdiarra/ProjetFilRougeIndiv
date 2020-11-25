@@ -24,10 +24,12 @@ use App\DataPersister\ProfilPersister;
  *              "method": "get",
  *              "path": "/profils",
  *              "normalization_context"={"groups":"admin_profil:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *          },
  *          "post_admin_profils":{
  *              "method": "post",
  *              "path": "/profils",
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *          }
  *      },
  *      itemOperations={
@@ -35,13 +37,20 @@ use App\DataPersister\ProfilPersister;
  *              "method": "get",
  *              "path": "/profils/{id}",
  *              "normalization_context"={"groups":"admin_profil:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *          },
  *          "get_admin_profil_id_users":{
  *              "method": "get",
  *              "path": "/profil/{id}/users",
  *              "normalization_context"={"groups":"admin_profil_id_users:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *          },
- *          "PUT","DELETE"
+ *          "PUT":{
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
+ *          },
+ *          "DELETE":{
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
+ *          }
  *      }
  * ),
  * @ApiFilter(BooleanFilter::class, properties={"isdeleted"})
@@ -59,6 +68,7 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      * @Groups({"admin_profil:read","admin_profil_id_users:read"})
      * @Assert\NotBlank()
      */
@@ -72,12 +82,13 @@ class Profil
 
     /**
      * @ORM\Column(type="boolean")
-     * @Assert\NotBlank()
+     * 
      */
     private $isdeleted;
 
     public function __construct()
     {
+        $this->isdeleted = 0;
         $this->users = new ArrayCollection();
     }
 

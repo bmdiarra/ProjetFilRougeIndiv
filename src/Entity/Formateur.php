@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Formateur;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FormateurRepository;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +11,33 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=FormateurRepository::class)
- * @ApiResource
+ * @ApiResource(
+ *      collectionOperations={
+ *          "get_formateurs":{
+ *              "method": "get",
+ *              "path": "/formateurs",
+ *              "normalization_context"={"groups":"formateur_apprenant:read"},
+ *          },
+ *          "post_formateurs":{
+ *              "method": "post",
+ *              "route_name":"postFormateurs",
+ *              "path": "/formateurs",
+ *              "deserialize"=false
+ *          }
+ *      },
+ *      itemOperations={
+ *          "get_formateur_id":{
+ *              "method": "get",
+ *              "path": "/formateurs/{id}",
+ *              "normalization_context"={"groups":"formateur_formateur:read"},
+ *          },
+ *          "put_formateurs":{
+ *              "method": "put",
+ *              "route_name":"putFormateurs",
+ *              "path": "/formateurs/{id}",
+ *          },
+ *      }
+ * )
  */
 class Formateur extends User
 {

@@ -12,8 +12,29 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  * @ApiResource(
  *      collectionOperations={
+ *          "get_apprenants":{
+ *              "method": "get",
+ *              "path": "/apprenants",
+ *              "normalization_context"={"groups":"formateur_apprenant:read"},
+ *          },
+ *          "post_apprenants":{
+ *              "method": "post",
+ *              "route_name":"postApprenants",
+ *              "path": "/apprenants",
+ *              "deserialize"=false
+ *          }
  *      },
  *      itemOperations={
+ *          "get_apprenant_id":{
+ *              "method": "get",
+ *              "path": "/apprenants/{id}",
+ *              "normalization_context"={"groups":"formateur_apprenant:read"},
+ *          },
+ *          "put_apprenants":{
+ *              "method": "put",
+ *              "route_name":"postApprenants",
+ *              "path": "/apprenants/{id}",
+ *          },
  *      }
  * )
  */

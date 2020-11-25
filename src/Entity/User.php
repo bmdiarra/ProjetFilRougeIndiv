@@ -27,10 +27,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "method": "get",
  *              "path": "/admin/users",
  *              "normalization_context"={"groups":"admin_user:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_CM'))"
  *          },
  *         "addUSer":{
  *              "method":"post",
  *              "path": "/admin/users",
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *              "deserialize"=false
  *          }, 
  *   },
@@ -39,10 +41,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "method": "get",
  *              "path": "/admin/users/{id}",
  *              "normalization_context"={"groups":"admin_user:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *          },
  *          "put_admin_users":{
  *              "method": "put",
  *              "path": "/admin/users/{id}",
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *          },
  *   }
  * )
@@ -140,7 +144,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_'.$this->profil->getLibelle();
 
         return array_unique($roles);
     }
