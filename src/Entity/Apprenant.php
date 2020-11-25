@@ -16,11 +16,13 @@ use Doctrine\Common\Collections\ArrayCollection;
  *              "method": "get",
  *              "path": "/apprenants",
  *              "normalization_context"={"groups":"formateur_apprenant:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_CM'))",
  *          },
  *          "post_apprenants":{
  *              "method": "post",
  *              "route_name":"postApprenants",
  *              "path": "/apprenants",
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *              "deserialize"=false
  *          }
  *      },
@@ -32,8 +34,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  *          },
  *          "put_apprenants":{
  *              "method": "put",
- *              "route_name":"postApprenants",
+ *              "route_name":"putApprenants",
  *              "path": "/apprenants/{id}",
+ *              "access_control"="(is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_APPRENANT'))",
  *          },
  *      }
  * )

@@ -29,7 +29,7 @@ class CmFixtures extends Fixture implements DependentFixtureInterface
         $cm ->setProfil ($this->getReference(ProfilFixtures::CM_PROFIL_REFERENCE));
         $cm ->setPrenom ($faker->firstName);
         $cm ->setNom ($faker->lastName);
-        $cm ->setIsdeleted ('no');
+       // $cm ->setIsdeleted ('no');
         $password = $this->encoder->encodePassword($cm, 'pass1234');
         $cm ->setPassword($password);
         $manager ->persist ($cm );

@@ -47,6 +47,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "method": "put",
  *              "path": "/admin/users/{id}",
  *              "access_control"="(is_granted('ROLE_ADMIN'))",
+ *              "deserialize"=false
  *          },
  *   }
  * )
@@ -100,7 +101,7 @@ class User implements UserInterface
     protected $nom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="boolean")
      */
     private $isdeleted;
 
@@ -113,6 +114,7 @@ class User implements UserInterface
     public function __construct()
     {
        // $this->profils = new ArrayCollection();
+       $this->isdeleted = 0;
     }
 
     public function getId(): ?int

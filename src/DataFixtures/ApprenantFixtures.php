@@ -29,7 +29,7 @@ class ApprenantFixtures extends Fixture implements DependentFixtureInterface
         $apprenant ->setProfil ($this->getReference(ProfilFixtures::APPRENANT_PROFIL_REFERENCE));
         $apprenant ->setPrenom ($faker->firstName);
         $apprenant ->setNom ($faker->lastName);
-        $apprenant ->setIsdeleted ('no');
+        //$apprenant ->setIsdeleted ('no');
         $password = $this->encoder->encodePassword($apprenant, 'pass1234');
         $apprenant ->setPassword($password);
         $manager ->persist ($apprenant );

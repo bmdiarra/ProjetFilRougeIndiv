@@ -29,7 +29,7 @@ class AdminFixtures extends Fixture implements DependentFixtureInterface
         $admin ->setProfil ($this->getReference(ProfilFixtures::ADMIN_PROFIL_REFERENCE));
         $admin ->setPrenom ($faker->firstName);
         $admin ->setNom ($faker->lastName);
-        $admin ->setIsdeleted ('no');
+       // $admin ->setIsdeleted ('no');
         $password = $this->encoder->encodePassword($admin, 'pass1234');
         $admin ->setPassword($password);
         $manager ->persist ($admin );

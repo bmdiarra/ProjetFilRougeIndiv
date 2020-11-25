@@ -35,6 +35,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *              "method": "put",
  *              "route_name":"putFormateurs",
  *              "path": "/formateurs/{id}",
+ *              "deserialize"=false
  *          },
  *      }
  * )

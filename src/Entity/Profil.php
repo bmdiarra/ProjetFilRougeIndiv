@@ -4,15 +4,16 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfilRepository;
+use App\DataPersister\ProfilPersister;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use Symfony\Component\Validator\Constraints as Assert;
-use App\DataPersister\ProfilPersister;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
@@ -53,7 +54,8 @@ use App\DataPersister\ProfilPersister;
  *          }
  *      }
  * ),
- * @ApiFilter(BooleanFilter::class, properties={"isdeleted"})
+ * @ApiFilter(BooleanFilter::class, properties={"isdeleted"}),
+ * @UniqueEntity("libelle",message="La libelle ne doit pas etre repeter")
  * 
  */
 class Profil

@@ -29,7 +29,7 @@ class FormateurFixtures extends Fixture implements DependentFixtureInterface
         $formateur ->setProfil ($this->getReference(ProfilFixtures::FORMATEUR_PROFIL_REFERENCE));
         $formateur ->setPrenom ($faker->firstName);
         $formateur ->setNom ($faker->lastName);
-        $formateur ->setIsdeleted ('no');
+      //  $formateur ->setIsdeleted ('no');
         $password = $this->encoder->encodePassword($formateur, 'pass1234');
         $formateur ->setPassword($password);
         $manager ->persist ($formateur );
