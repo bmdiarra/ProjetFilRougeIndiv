@@ -36,6 +36,11 @@ class Niveau
      */
     private $livrablePartiels;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
@@ -125,6 +130,18 @@ class Niveau
         if ($this->livrablePartiels->removeElement($livrablePartiel)) {
             $livrablePartiel->removeNiveau($this);
         }
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }
