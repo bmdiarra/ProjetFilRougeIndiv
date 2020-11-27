@@ -49,7 +49,7 @@ class ApprenantController extends AbstractController
 
   /**
    * @Route(
-   *      name="putApprenant",
+   *      name="putApprenants",
    *      path="/api/apprenants/{id}",
    *      methods={"PUT"},
    * )

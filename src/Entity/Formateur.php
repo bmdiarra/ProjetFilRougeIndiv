@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *              "method": "get",
  *              "path": "/formateurs",
  *              "normalization_context"={"groups":"formateur_apprenant:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *          },
  *          "post_formateurs":{
  *              "method": "post",
@@ -30,11 +31,13 @@ use Doctrine\Common\Collections\ArrayCollection;
  *              "method": "get",
  *              "path": "/formateurs/{id}",
  *              "normalization_context"={"groups":"formateur_formateur:read"},
+ *              "access_control"="(is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_CM'))",
  *          },
  *          "put_formateurs":{
  *              "method": "put",
  *              "route_name":"putFormateurs",
  *              "path": "/formateurs/{id}",
+ *              "access_control"="(is_granted('ROLE_ADMIN'))",
  *              "deserialize"=false
  *          },
  *      }

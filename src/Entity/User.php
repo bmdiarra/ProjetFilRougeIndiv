@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "method": "get",
  *              "path": "/admin/users",
  *              "normalization_context"={"groups":"admin_user:read"},
- *              "access_control"="(is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_CM'))"
+ *              "access_control"="(is_granted('ROLE_ADMIN') )"
  *          },
  *         "addUSer":{
  *              "method":"post",
