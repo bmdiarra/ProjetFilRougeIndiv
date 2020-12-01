@@ -2,13 +2,90 @@
 
 namespace App\Entity;
 
-use App\Repository\PromoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PromoRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=PromoRepository::class)
+ * @ApiResource(
+ *      collectionOperations={
+ *          "getpromos":{
+ *              "method":"get",
+ *              "path":"/admin/promo",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosprincipal":{
+ *              "method":"get",
+ *              "path":"/admin/promo/principal",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosapprenantsattente":{
+ *              "method":"get",
+ *              "path":"/admin/promo/apprenants/attente",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "postpromos":{
+ *              "method":"post",
+ *              "path":"/admin/promo",
+ *          }
+ *      },
+ *      itemOperations={
+ *          "getpromosid":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosidprincipal":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}/principal",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosidprincipal":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}/principal",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosidreferentiel":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}/referentiel",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosidapprenantsattente":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}/apprenants/attente",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosidapprenantsattente":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}/groupes/{id2}/apprenants",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "getpromosidformateurs":{
+ *              "method":"get",
+ *              "path":"/admin/promo/{id}/formateurs",
+ *              "normalization_context":{"groups":"get_promos:read"}
+ *          },
+ *          "putpromosid":{
+ *              "method":"put",
+ *              "path":"/admin/promo/{id}",
+ *          },
+ *          "putpromosidapprenants":{
+ *              "method":"put",
+ *              "path":"/admin/promo/{id}/apprenants",
+ *          },
+ *          "putpromosidapprenants":{
+ *              "method":"put",
+ *              "path":"/admin/promo/{id}/formateurs",
+ *          },
+ *          "putpromosidgroupesid":{
+ *              "method":"put",
+ *              "path":"/admin/promo/{id}/groupes/{id2}",
+ *          }
+ *      }
+ * )
  */
 class Promo
 {
@@ -44,10 +121,26 @@ class Promo
      */
     private $briefmapromos;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isdeleted;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->competencesValides = new ArrayCollection();
         $this->referentiels = new ArrayCollection();
+        $this->isdeleted = 0 ;
     }
 
     public function getId(): ?int
@@ -144,6 +237,42 @@ class Promo
     public function setBriefmapromos(?BriefMaPromo $briefmapromos): self
     {
         $this->briefmapromos = $briefmapromos;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getIsdeleted(): ?bool
+    {
+        return $this->isdeleted;
+    }
+
+    public function setIsdeleted(?bool $isdeleted): self
+    {
+        $this->isdeleted = $isdeleted;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

@@ -26,24 +26,26 @@ class CompetenceFixtures extends Fixture implements DependentFixtureInterface
 
      public function load(ObjectManager $manager)
     { 
-        $groupecompetence = new GroupeCompetence();
+        /* $groupecompetence = new GroupeCompetence();
         $groupecompetence->setLibelle("Groupe Competence 1");
         $manager->persist($groupecompetence);
-        $manager->flush();
+        $manager->flush(); */
          
         $competence1 =new Competence() ;
         $competence1->setLibelle("Competence1");
         $competence1->setDescription("Description1");
         $competence1->setArchivage(false);
         $competence1->setNiveaux($this->getReference(NiveauFixtures::ADMIN_NIVEAU1_REFERENCE));
-        $competence1->addGroupescompetence($groupecompetence);
+       // $competence1->addGroupescompetence($this->getReference(GroupeCompetenceFixtures::ADMIN_GRPECOMPETENCE1_REFERENCE));
+        
         $manager ->persist ($competence1 );
 
         $competence2 =new Competence() ;
         $competence2->setLibelle("Competence2");
         $competence2->setDescription("Description2");
         $competence2->setArchivage(false);
-        $competence1->setNiveaux($this->getReference(NiveauFixtures::ADMIN_NIVEAU2_REFERENCE));
+        $competence2->setNiveaux($this->getReference(NiveauFixtures::ADMIN_NIVEAU2_REFERENCE));
+       // $competence2->addGroupescompetence($this->getReference(GroupeCompetenceFixtures::ADMIN_GRPECOMPETENCE1_REFERENCE));
         $manager ->persist ($competence2 );
 
         $competence3 =new Competence() ;

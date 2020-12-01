@@ -47,4 +47,18 @@ class ReferentielRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findidrefidgrpescomp($id, $id2)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.id = :val')
+            ->setParameter('val', $id)
+            ->innerjoin('r.groupecompetences','g')
+            ->andWhere('g.id = :val')
+            ->setParameter('val', $id2)
+            
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

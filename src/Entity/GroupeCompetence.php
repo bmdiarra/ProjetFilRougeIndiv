@@ -59,7 +59,7 @@ class GroupeCompetence
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"admin_grpscompetences_competences:read"})
+     * @Groups({"admin_grpscompetences_competences:read","get_referentiel:read"})
      */
     private $id;
 
@@ -71,6 +71,7 @@ class GroupeCompetence
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get_referentiel:read"})
      */
     private $libelle;
 
@@ -79,9 +80,15 @@ class GroupeCompetence
      */
     private $description;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="groupecompetences")
+     */
+    private $referentiels;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
+        $this->referentiels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,6 +143,33 @@ class GroupeCompetence
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Referentiel[]
+     */
+    public function getReferentiels(): Collection
+    {
+        return $this->referentiels;
+    }
+
+    public function addReferentiel(Referentiel $referentiel): self
+    {
+        if (!$this->referentiels->contains($referentiel)) {
+            $this->referentiels[] = $referentiel;
+            $referentiel->addGroupecompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferentiel(Referentiel $referentiel): self
+    {
+        if ($this->referentiels->removeElement($referentiel)) {
+            $referentiel->removeGroupecompetence($this);
+        }
 
         return $this;
     }
