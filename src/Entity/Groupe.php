@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\GroupeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\GroupeRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=GroupeRepository::class)
+ * @ApiResource
  */
 class Groupe
 {
@@ -16,6 +21,7 @@ class Groupe
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"put_promo_app:write"})
      */
     private $id;
 
@@ -26,6 +32,8 @@ class Groupe
 
     /**
      * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="groupes")
+     * @Groups({"put_promo_app:write"})
+     * @ApiSubresource
      */
     private $apprenants;
 
@@ -38,6 +46,11 @@ class Groupe
      * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="groupes")
      */
     private $formateurs;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $statut;
 
     public function __construct()
     {
@@ -159,6 +172,18 @@ class Groupe
     public function removeFormateur(Formateur $formateur): self
     {
         $this->formateurs->removeElement($formateur);
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

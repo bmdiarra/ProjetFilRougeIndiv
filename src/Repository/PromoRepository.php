@@ -47,4 +47,77 @@ class PromoRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findByGroupePrincipal($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerjoin('p.groupes','g')
+            ->andWhere('g.statut = :val')
+            ->setParameter('val', $value)
+            
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByApprenantAttente($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerjoin('p.groupes','g')
+            ->innerjoin('g.apprenants','a')
+            ->andWhere('a.statut = :val')
+            ->setParameter('val', $value)
+            
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByidGroupePrincipal($id, $value)
+    {
+        return $this->createQueryBuilder('p')
+            
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $id)
+            ->innerjoin('p.groupes','g')
+            ->andWhere('g.statut = :val')
+            ->setParameter('val', $value)
+            
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByidApprenantAttente($id, $value)
+    {
+        return $this->createQueryBuilder('p')
+            
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $id)
+            ->innerjoin('p.groupes','g')
+            ->innerjoin('g.apprenants','a')
+            ->andWhere('a.statut = :val')
+            ->setParameter('val', $value)
+            
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByidGrpidAppr($id, $id2)
+    {
+        return $this->createQueryBuilder('p')
+            
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $id)
+            ->innerjoin('p.groupes','g')
+            ->andWhere('g.id = :val')
+            ->setParameter('val', $id2)
+            
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    
 }

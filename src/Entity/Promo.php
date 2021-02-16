@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Groupe;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PromoRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PromoRepository::class)
@@ -30,6 +33,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *          "postpromos":{
  *              "method":"post",
  *              "path":"/admin/promo",
+ *              "denormalization_context":{"groups":"post_promo:write"}
  *          }
  *      },
  *      itemOperations={
@@ -43,22 +47,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  *              "path":"/admin/promo/{id}/principal",
  *              "normalization_context":{"groups":"get_promos:read"}
  *          },
- *          "getpromosidprincipal":{
- *              "method":"get",
- *              "path":"/admin/promo/{id}/principal",
- *              "normalization_context":{"groups":"get_promos:read"}
- *          },
  *          "getpromosidreferentiel":{
  *              "method":"get",
- *              "path":"/admin/promo/{id}/referentiel",
- *              "normalization_context":{"groups":"get_promos:read"}
+ *              "path":"/admin/promo/{id}/referentiels",
+ *              "normalization_context":{"groups":"get_promo_id_referentiels:read"}
  *          },
  *          "getpromosidapprenantsattente":{
  *              "method":"get",
  *              "path":"/admin/promo/{id}/apprenants/attente",
  *              "normalization_context":{"groups":"get_promos:read"}
  *          },
- *          "getpromosidapprenantsattente":{
+ *          "getpromosidgrpeidapprenants":{
  *              "method":"get",
  *              "path":"/admin/promo/{id}/groupes/{id2}/apprenants",
  *              "normalization_context":{"groups":"get_promos:read"}
@@ -75,10 +74,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  *          "putpromosidapprenants":{
  *              "method":"put",
  *              "path":"/admin/promo/{id}/apprenants",
+ *              "normalization_context"={"groups"={"put_promo_app:write"}}
  *          },
- *          "putpromosidapprenants":{
+ *          "putpromosidreferentiels":{
+ *              "method":"put",
+ *              "path":"/admin/promo/{id}/referentiels",
+ *              "denormalization_context"={"groups"={"put_promos:write"}}
+ *          },
+ *          "putpromosidformateurs":{
  *              "method":"put",
  *              "path":"/admin/promo/{id}/formateurs",
+ *              "denormalization_context"={"groups"={"put_promo:write"}}
  *          },
  *          "putpromosidgroupesid":{
  *              "method":"put",
@@ -93,6 +99,7 @@ class Promo
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get_promos:read"})
      */
     private $id;
 
@@ -102,7 +109,9 @@ class Promo
     private $competencesValides;
 
     /**
-     * @ORM\OneToMany(targetEntity=Referentiel::class, mappedBy="promos")
+     * @ORM\OneToMany(targetEntity=Referentiel::class, mappedBy="promos", cascade={"persist"})
+     * @Groups({"get_promos:read","put_promos:write"})
+     * @ApiSubresource
      */
     private $referentiels;
 
@@ -113,6 +122,9 @@ class Promo
 
     /**
      * @ORM\ManyToOne(targetEntity=Groupe::class, inversedBy="promos")
+     * @Groups({"put_promo_app:write"})
+     * @ApiSubresource
+     * 
      */
     private $groupes;
 
@@ -123,6 +135,7 @@ class Promo
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"post_promo:write","put_promos:write"})
      */
     private $libelle;
 
@@ -133,6 +146,7 @@ class Promo
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"put_promos:write"})
      */
     private $description;
 
@@ -141,6 +155,7 @@ class Promo
         $this->competencesValides = new ArrayCollection();
         $this->referentiels = new ArrayCollection();
         $this->isdeleted = 0 ;
+        $this->apprenants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -276,4 +291,5 @@ class Promo
 
         return $this;
     }
+
 }

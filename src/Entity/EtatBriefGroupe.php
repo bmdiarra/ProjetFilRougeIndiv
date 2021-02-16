@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\EtatBriefGroupeRepository;
+use App\Entity\Groupe;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EtatBriefGroupeRepository;
 
 /**
  * @ORM\Entity(repositoryClass=EtatBriefGroupeRepository::class)

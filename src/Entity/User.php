@@ -58,12 +58,14 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"admin_user:read"})
+     * @Groups({"admin_user:read","post_promo:write","put_promo_app:write"})
+     * 
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"put_promo_app:write","admin_user:read"})
      * @Assert\NotBlank()
      */
     protected $username;
@@ -73,6 +75,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups({"put_promo_app:write"})
      * @Assert\NotBlank()
      */
     protected $password;
@@ -90,18 +93,21 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"put_promo_app:write","admin_user:read"})
      * 
      */
     protected $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"put_promo_app:write","admin_user:read"})
      * 
      */
     protected $nom;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"put_promo_app:write"})
      */
     private $isdeleted;
 
@@ -109,6 +115,12 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=Chat::class, inversedBy="users")
      */
     protected $chats;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"put_promo_app:write"})
+     */
+    private $statut;
 
 
     public function __construct()
@@ -198,7 +210,7 @@ class User implements UserInterface
     public function setProfil(?Profil $profil): self
     {
         $this->profil = $profil;
-
+        
         return $this;
     }
 
@@ -258,6 +270,18 @@ class User implements UserInterface
     public function setChats(?Chat $chats): self
     {
         $this->chats = $chats;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

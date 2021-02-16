@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Groupe;
 use App\Entity\Formateur;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FormateurRepository;

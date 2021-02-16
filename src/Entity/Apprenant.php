@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Groupe;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ApprenantRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
@@ -44,12 +46,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Apprenant extends User
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
 
     /**
      * @ORM\OneToMany(targetEntity=LivrableAttenduApprenant::class, mappedBy="apprenants")
@@ -209,10 +205,5 @@ class Apprenant extends User
         return $this;
     }
 
-    public function removeGroupe(Groupe $groupe): self
-    {
-        $this->groupes->removeElement($groupe);
-
-        return $this;
-    }
+   
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Apprenant;
 use App\Service\UploadService;
 use App\Service\PutBlobService;
 use App\Repository\UserRepository;
@@ -26,13 +27,19 @@ class UserController extends AbstractController
     public function addUser(Request $request, DenormalizerInterface $denormalize, ValidatorInterface $validator, UploadService $uploads, ProfilRepository $profilrepo){
         
         $requestContent = $request->request->all();
-        $profil = $profilrepo->find((int)$request->get($requestContent["profil_id"]));
-        //dd($requestContent["profil"]);
+        //$profil = $profilrepo->find($requestContent["profil_id"]);
+        $profilName = ucfirst(strtolower($requestContent['profil']));
+        
+        $profilEntity = "App\\Entity\\$profilName";
+        $profil = $profilrepo->findOneBy(['libelle' => $requestContent["profil"]]);
+        unset($requestContent["profil"]);
         $avatar = $uploads->upload('avatar', $request);
-
-        $user = $denormalize->denormalize($requestContent, User::class);
+      
+        //$user = $denormalize->denormalize($requestContent, Apprenant::class);
+        $user = $denormalize->denormalize($requestContent, $profilEntity);
         $user->setAvatar($avatar);
         $user->setProfil($profil);
+       // dd($user->profil);
         $errors = $validator->validate($user);
 
         if ($errors != NULL) {

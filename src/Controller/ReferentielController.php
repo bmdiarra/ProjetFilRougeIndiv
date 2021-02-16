@@ -22,7 +22,7 @@ class ReferentielController extends AbstractController
     public function getrefidgrpsrefid(Request $request, DenormalizerInterface $denormalize, ValidatorInterface $validator, ReferentielRepository $repo){
         
         $ref = $repo->findidrefidgrpescomp( (int)$request->get("id"), (int)$request->get("id2"));
-        dd($ref);
+        return $this->json($ref, Response::HTTP_OK, [], );
     }
     
 

@@ -53,7 +53,7 @@ class Referentiel
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get_referentiel:read"})
+     * @Groups({"get_referentiel:read","get_promos:read","put_promos:write"})
      */
     private $id;
 
@@ -63,17 +63,19 @@ class Referentiel
     private $competencesvalides;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="referentiels")
+     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="referentiels", cascade={"persist"}))
      */
     private $promos;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"put_promos:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * 
      */
     private $isdeleted;
 

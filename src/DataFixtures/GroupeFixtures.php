@@ -3,17 +3,17 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Promo;
+use App\Entity\Groupe;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class PromoFixtures extends Fixture implements DependentFixtureInterface
+class GroupeFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const ADMIN_PROMO3_REFERENCE = 'admin_promo3_reference';
-
     private $encoder;
+    public const ADMIN_GROUPE1_REFERENCE = 'admin-groupe1';
+
     public function __construct(UserPasswordEncoderInterface $encoder ){
         
         $this->encoder=$encoder;
@@ -24,21 +24,19 @@ class PromoFixtures extends Fixture implements DependentFixtureInterface
     { 
         
         for ($i=0 ; $i < 2 ; $i++) { 
-        $promo =new Promo() ;
-        $promo ->setLibelle('promo'.$i);
-        
-        $manager ->persist ($promo );
-
+        $groupe =new Groupe() ;
+        $groupe ->setStatut('principal');
+        $manager ->persist ($groupe );
         }
 
-        $promo3 =new Promo() ;
-        $promo3 ->setLibelle('promo'.$i);
-        $promo ->setGroupes($this->getReference(GroupeFixtures::ADMIN_GROUPE1_REFERENCE));
-        $manager ->persist ($promo3 );
+        $groupe3 =new Groupe() ;
+        $groupe3 ->setStatut('principal');
+        $groupe3 ->addApprenant($this->getReference(ApprenantFixtures::ADMIN_APPRENANT1_REFERENCE));
+        $manager ->persist ($groupe3 );
 
         $manager ->flush();  
 
-        $this->addReference(self::ADMIN_PROMO3_REFERENCE, $promo3);
+        $this->addReference(self::ADMIN_GROUPE1_REFERENCE, $groupe3);
    }
 
    public function getDependencies()
@@ -46,7 +44,7 @@ class PromoFixtures extends Fixture implements DependentFixtureInterface
         return array(
             ProfilFixtures::class,
             NiveauFixtures::class,
-            GroupeFixtures::class
+            ApprenantFixtures::class
         );
     } 
 
